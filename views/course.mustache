@@ -1,0 +1,52 @@
+
+{{> head}}
+{{> header}}
+
+<article>
+  <h1>{{course.title}}</h1>
+  <p class="muted">
+    Level: {{course.level}} • Type: {{course.type}} {{#course.allowDropIn}}• Drop-in available{{/course.allowDropIn}}
+  </p>
+  <p>{{course.description}}</p>
+  <p class="muted">Dates: {{course.startDate}} – {{course.endDate}}</p>
+
+  <section>
+    <h2>Book the full course</h2>
+   <form action="/courses/{{course.id}}/book" method="post">  <!-- If you add CSRF later: <input type="hidden" name="_csrf" value="{{csrfToken}}"> -->
+      <input type="hidden" name="userId" value="{{user._id}}">
+      <button class="btn primary" type="submit">Book full course</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>Sessions</h2>
+    <table class="table">
+      <thead>
+        <tr><th>Start</th><th>End</th><th>Capacity</th><th>Booked</th><th>Remaining</th><th></th></tr>
+      </thead>
+      <tbody>
+        {{#sessions}}
+        <tr>
+          <td>{{start}}</td>
+          <td>{{end}}</td>
+          <td>{{capacity}}</td>
+          <td>{{booked}}</td>
+          <td>{{remaining}}</td>
+          <td>
+            {{#../course.allowDropIn}}
+            <form method="postook
+              <button class="btn" type="submit" {{#isFull}}disabled{{/isFull}}>Book this session</button>
+            </form>
+            {{/../course.allowDropIn}}
+            {{^../course.allowDropIn}}
+              <span class="muted">Drop-ins disabled</span>
+            {{/../course.allowDropIn}}
+          </td>
+        </tr>
+        {{/sessions}}
+      </tbody>
+    </table>
+  </section>
+</article>
+
+{{> footer}}

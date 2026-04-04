@@ -1,0 +1,67 @@
+
+{{> head}}
+{{> header}}
+
+<article>
+  <h1>Book: {{course.title}}</h1>
+  <p class="muted">
+    Level: {{course.level}} • Type: {{course.type}} {{#course.allowDropIn}}• Drop-in available{{/course.allowDropIn}}
+  </p>
+  <p>{{course.description}}</p>
+  <p class="muted">Dates: {{course.startDate}} – {{course.endDate}}</p>
+
+  {{#errors}}
+  <div class="alert error" role="alert" aria-live="assertive">
+    <ul>
+      {{#list}}
+      <li>{{.}}</li>
+      {{/list}}
+    </ul>
+  </div>
+  {{/errors}}
+
+  <form method="post" action="/   <!-- If you add CSRF later: <input type="hidden" name="_csrf" value="{{csrfToken}}"> -->
+    <input type="hidden" name="userId" value="{{user._id}}">
+
+    <fieldset>
+      <legend>Your details</legend>
+
+      <div class="field">
+        <label for="name">Full name</label>
+        <input id="name" name="name" type="text" required value="{{user.name}}">
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required value="{{user.email}}">
+      </div>
+
+      <div class="field">
+        <label for="notes">Notes (injuries, preferences)</label>
+        <textarea id="notes" name="notes" rows="4" placeholder="Optional">{{notes}}</textarea>
+      </div>
+
+      <div class="field checkbox">
+        <input id="consent" name="consent" type="checkbox" required>
+        <label for="consent">I agree to the studio’s booking terms &amp; health disclaimer.</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Booking summary</legend>
+      <p>This booking reserves a seat across <strong>{{sessionsCount}}</strong> sessions:</p>
+      <ul class="muted">
+        {{#sessions}}
+        <li>{{start}} ({{remaining}} places left)</li>
+        {{/sessions}}
+      </ul>
+    </fieldset>
+
+    <div class="actions">
+      <button class="btn primary" type="submit">Confirm Course Booking</button>
+      /courses/{{course.id}}Cancel</a>
+    </div>
+  </form>
+</article>
+
+{{> footer}}
