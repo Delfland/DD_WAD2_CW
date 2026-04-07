@@ -47,4 +47,19 @@ describe("SSR view routes", () => {
     expect(res.headers["content-type"]).toMatch(/html/);
     expect(res.text).toMatch(/Confirm Session Booking|Book Session/i);
   });
+
+  test("GET /users renders users alphabetically by name with emails", async () => {
+    const res = await request(app).get("/users");
+    expect(res.status).toBe(200);
+    expect(res.headers["content-type"]).toMatch(/html/);
+    expect(res.text).toMatch(/Registered Users/);
+    expect(res.text).toMatch(/instructor@test\.local/);
+    expect(res.text).toMatch(/student@test\.local/);
+
+    const instructorIdx = res.text.indexOf("Test Instructor");
+    const studentIdx = res.text.indexOf("Test Student");
+    expect(instructorIdx).toBeGreaterThan(-1);
+    expect(studentIdx).toBeGreaterThan(-1);
+    expect(instructorIdx).toBeLessThan(studentIdx);
+  });
 });

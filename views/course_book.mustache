@@ -1,13 +1,17 @@
-
+<!DOCTYPE html>
+<html lang="en">
 {{> head}}
+<body>
 {{> header}}
-
+<main class="wrap">
 <article>
   <h1>Book: {{course.title}}</h1>
   <p class="muted">
     Level: {{course.level}} • Type: {{course.type}} {{#course.allowDropIn}}• Drop-in available{{/course.allowDropIn}}
   </p>
   <p>{{course.description}}</p>
+  <p class="muted">Price: &pound; {{course.price}} {{#course.allowDropIn}}per session{{/course.allowDropIn}}{{^course.allowDropIn}}per course{{/course.allowDropIn}}</p>
+  <p class="muted">Location: {{course.location}}</p>
   <p class="muted">Dates: {{course.startDate}} – {{course.endDate}}</p>
 
   {{#errors}}
@@ -20,7 +24,7 @@
   </div>
   {{/errors}}
 
-  <form method="post" action="/   <!-- If you add CSRF later: <input type="hidden" name="_csrf" value="{{csrfToken}}"> -->
+  <form method="post" action="/courses/{{course.id}}/book">
     <input type="hidden" name="userId" value="{{user._id}}">
 
     <fieldset>
@@ -43,7 +47,7 @@
 
       <div class="field checkbox">
         <input id="consent" name="consent" type="checkbox" required>
-        <label for="consent">I agree to the studio’s booking terms &amp; health disclaimer.</label>
+        <label for="consent">I agree to the studio booking terms and health disclaimer.</label>
       </div>
     </fieldset>
 
@@ -52,16 +56,18 @@
       <p>This booking reserves a seat across <strong>{{sessionsCount}}</strong> sessions:</p>
       <ul class="muted">
         {{#sessions}}
-        <li>{{start}} ({{remaining}} places left)</li>
+        <li>{{start}} • {{location}} ({{remaining}} places left)</li>
         {{/sessions}}
       </ul>
     </fieldset>
 
     <div class="actions">
       <button class="btn primary" type="submit">Confirm Course Booking</button>
-      /courses/{{course.id}}Cancel</a>
+      <a class="btn secondary" href="/courses/{{course.id}}">Cancel</a>
     </div>
   </form>
 </article>
-
+</main>
 {{> footer}}
+</body>
+</html>

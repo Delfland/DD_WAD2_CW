@@ -31,12 +31,11 @@ export async function seedMinimal() {
   const student = await UserModel.create({
     name: "Test Student",
     email: "student@test.local",
-    role: "student",
   });
   const instructor = await UserModel.create({
     name: "Test Instructor",
     email: "instructor@test.local",
-    role: "instructor",
+    role: "admin",
   });
 
   const course = await CourseModel.create({
@@ -44,10 +43,11 @@ export async function seedMinimal() {
     level: "beginner",
     type: "WEEKLY_BLOCK",
     allowDropIn: true,
+    capacity: 18,
+    price: 15,
     startDate: "2026-02-02",
     endDate: "2026-04-20",
     instructorId: instructor._id,
-    sessionIds: [],
     description: "A test course for E2E route testing.",
   });
 
@@ -56,7 +56,6 @@ export async function seedMinimal() {
     courseId: course._id,
     startDateTime: new Date("2026-02-02T18:30:00").toISOString(),
     endDateTime: new Date("2026-02-02T19:45:00").toISOString(),
-    capacity: 18,
     bookedCount: 0,
   });
 
@@ -64,11 +63,8 @@ export async function seedMinimal() {
     courseId: course._id,
     startDateTime: new Date("2026-02-09T18:30:00").toISOString(),
     endDateTime: new Date("2026-02-09T19:45:00").toISOString(),
-    capacity: 18,
     bookedCount: 0,
   });
-
-  await CourseModel.update(course._id, { sessionIds: [s1._id, s2._id] });
 
   return { student, instructor, course, sessions: [s1, s2] };
 }

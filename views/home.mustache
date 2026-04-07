@@ -1,19 +1,25 @@
-
+<!DOCTYPE html>
+<html lang="en">
 {{> head}}
+<body>
 {{> header}}
-<h1>Upcoming Courses</h1>
-
+<main class="wrap">
+<h1>Welcome to Kindred Yoga Studio</h1>
+<p>Kindred Yoga Studio is a welcoming, community-focused studio in Glasgow’s East End offering accessible, down-to-earth yoga for every body and every background. Classes include Hatha (for steady foundations and beginners), Vinyasa Flow (for energy and movement), Yin Yoga (for deep stretch and recovery), and Restorative Yoga (for stress relief and relaxation), alongside weekly community mindfulness and breathwork sessions.</p>
+<h2>Upcoming Courses</h2>
 <div class="cards">
   {{#courses}}
   <article class="card">
-    <h2>/courses/{{title}}</a></h2>
+    <h3>{{title}}</h3>
     <p class="muted">
       Level: {{level}} • Type: {{type}} {{#allowDropIn}}• Drop-in OK{{/allowDropIn}}
     </p>
     <p>{{description}}</p>
-    <p class="muted">Dates: {{startDate}}  {{endDate}}</p>
+    <p class="muted">Price: &pound; {{price}} {{#allowDropIn}}per session{{/allowDropIn}}{{^allowDropIn}}per course{{/allowDropIn}}</p>
+    <p class="muted">Location: {{location}}</p>
+    <p class="muted">Dates: {{startDate}} - {{endDate}}</p>
     <p class="muted">Next session: {{nextSession}} • Sessions: {{sessionsCount}}</p>
-    <p>/courses/View &amp; Book</a></p>
+    <a href = "/courses/{{id}}">View and Book</a>
   </article>
   {{/courses}}
 
@@ -21,6 +27,7 @@
     <p>No courses available yet.</p>
   {{/courses}}
 </div>
-
+</main>
 {{> footer}}
-``
+</body>
+</html>

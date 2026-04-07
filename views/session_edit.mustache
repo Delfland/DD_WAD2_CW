@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+{{> head}}
+<body>
+{{> header}}
+<main class="wrap">
+<article>
+  <h1>Edit Session</h1>
+  <p class="muted">Course: {{course.title}}</p>
+
+  <form method="post" action="/courses/{{course.id}}/sessions/{{session.id}}/edit">
+    <fieldset>
+      <legend>Session Details</legend>
+
+      <div class="field">
+        <label for="sessionDate">Date</label>
+        <input id="sessionDate" name="sessionDate" type="date" required value="{{session.sessionDate}}" />
+      </div>
+
+      <div class="field">
+        <label for="startTime">Start Time</label>
+        <input id="startTime" name="startTime" type="time" required value="{{session.startTime}}" />
+      </div>
+
+      <div class="field">
+        <label for="endTime">End Time</label>
+        <input id="endTime" name="endTime" type="time" required value="{{session.endTime}}" />
+      </div>
+
+      <p class="muted">Capacity: {{session.capacity}}</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Status</legend>
+      <p class="muted">Current Bookings: {{session.bookedCount}} / {{session.capacity}}</p>
+      {{#session.bookedCount}}
+      <p class="muted"><strong>Note:</strong> This session has {{session.bookedCount}} booking(s). Changes will affect existing bookings.</p>
+      {{/session.bookedCount}}
+    </fieldset>
+
+    <div class="actions">
+      <button class="btn primary" type="submit">Save Session Changes</button>
+      <a class="btn secondary" href="/courses/{{course.id}}/edit">Cancel</a>
+    </div>
+  </form>
+</article>
+</main>
+{{> footer}}
+</body>
+</html>

@@ -1,0 +1,228 @@
+:root {
+    --ink: #222;
+    --muted: #666;
+    --bg: #fff;
+    --brand: #6b7;
+    --line: #eee;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font: 16px/1.5 system-ui, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+.wrap {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.site-header .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    min-height: 64px;
+}
+
+.site-header,
+.site-footer {
+    background: #fafafa;
+    border-bottom: 1px solid var(--line);
+}
+
+.site-footer {
+    border-top: 1px solid var(--line);
+    border-bottom: none;
+    margin-top: auto;
+}
+
+.site-header .brand {
+    font-weight: 700;
+    color: var(--ink);
+    text-decoration: none;
+    margin-right: 1rem;
+}
+
+nav a {
+    margin-right: 1rem;
+    color: var(--ink);
+    text-decoration: none;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-right: auto;
+}
+
+.inline-form {
+    display: inline;
+    margin: 0;
+}
+
+.inline-form .btn {
+    cursor: pointer;
+}
+
+.user {
+    margin-left: 0;
+}
+
+.cards {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    margin: 1rem 0;
+}
+
+.card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 1rem;
+    background: #fff;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--ink);
+    background: #fff;
+    cursor: pointer;
+}
+
+.btn.primary {
+    background: var(--brand);
+    border-color: #4a5;
+    color: #fff;
+}
+
+.btn.secondary {
+    background: #fff;
+    border-color: #cfcfcf;
+    color: var(--ink);
+}
+
+.btn.link-style {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    padding: 0.25rem 0;
+    text-decoration: underline;
+    border-radius: 0;
+}
+
+.btn.link-style:hover {
+    color: var(--ink);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+.table th,
+.table td {
+    border: 1px solid var(--line);
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+.kv {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.25rem 1rem;
+}
+
+.filters {
+    margin: 1rem 0;
+}
+
+.filter-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem;
+    align-items: end;
+}
+
+.filter-form label {
+    display: grid;
+    gap: 0.25rem;
+}
+
+.pagination {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.field {
+    display: grid;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+.field label {
+    font-weight: 500;
+}
+
+.field input,
+.field textarea,
+.field select {
+    padding: 0.5rem;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font: inherit;
+}
+
+.field input[type="checkbox"] {
+    width: auto;
+    margin-right: 0.5rem;
+}
+
+fieldset {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 1.5rem 0;
+}
+
+legend {
+    padding: 0 0.5rem;
+    font-weight: 600;
+}
+
+.actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid var(--line);
+    margin: 2rem 0;
+}

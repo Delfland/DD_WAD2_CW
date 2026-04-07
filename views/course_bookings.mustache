@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+{{> head}}
+<body>
+{{> header}}
+<main class="wrap">
+<article>
+  <h1>Bookings: {{course.title}}</h1>
+  <p class="muted">This page shows all bookings for this course.</p>
+  <p class="muted">Confirmed: {{confirmedCount}} • Waitlisted: {{waitlistedCount}}</p>
+
+  {{#course.allowDropIn}}
+  <section>
+    <h2>Bookings by Session</h2>
+
+    {{#hasSessionGroups}}
+      {{#sessionBookingGroups}}
+      <div class="card">
+        <h3>{{sessionDate}}</h3>
+        <p class="muted">Start: {{sessionStart}} • End: {{sessionEnd}}</p>
+        <p class="muted">Confirmed: {{confirmedCount}} • Waitlisted: {{waitlistedCount}}</p>
+
+        {{#hasBookings}}
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Booking ID</th>
+              <th>User</th>
+              <th>Email</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#bookings}}
+            <tr>
+              <td>{{id}}</td>
+              <td>{{userName}}</td>
+              <td>{{userEmail}}</td>
+              <td>{{type}}</td>
+              <td>{{status}}</td>
+              <td>{{createdAt}}</td>
+            </tr>
+            {{/bookings}}
+          </tbody>
+        </table>
+        {{/hasBookings}}
+
+        {{^hasBookings}}
+        <p class="muted">No bookings for this session.</p>
+        {{/hasBookings}}
+      </div>
+      {{/sessionBookingGroups}}
+    {{/hasSessionGroups}}
+
+    {{^hasSessionGroups}}
+    <p class="muted">No sessions available for this course.</p>
+    {{/hasSessionGroups}}
+  </section>
+  {{/course.allowDropIn}}
+
+  {{^course.allowDropIn}}
+  <section>
+    <h2>Course Bookings</h2>
+
+    {{#hasBookings}}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Booking ID</th>
+          <th>User</th>
+          <th>Email</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#bookings}}
+        <tr>
+          <td>{{id}}</td>
+          <td>{{userName}}</td>
+          <td>{{userEmail}}</td>
+          <td>{{type}}</td>
+          <td>{{status}}</td>
+          <td>{{createdAt}}</td>
+        </tr>
+        {{/bookings}}
+      </tbody>
+    </table>
+    {{/hasBookings}}
+
+    {{^hasBookings}}
+    <p class="muted">No bookings for this course yet.</p>
+    {{/hasBookings}}
+  </section>
+  {{/course.allowDropIn}}
+
+  <div class="actions">
+    <a class="btn secondary" href="/courses">Back to courses</a>
+    <a class="btn secondary" href="/courses/{{course.id}}/edit">Edit course</a>
+  </div>
+</article>
+</main>
+{{> footer}}
+</body>
+</html>

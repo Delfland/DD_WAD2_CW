@@ -6,11 +6,15 @@ import {
   sessionsDb,
   bookingsDb,
 } from "../models/_db.js";
+import { pathToFileURL } from "url";
 import { CourseModel } from "../models/courseModel.js";
 import { SessionModel } from "../models/sessionModel.js";
 import { UserModel } from "../models/userModel.js";
+import { bookCourseForUser, bookSessionForUser } from "../services/bookingService.js";
 
 const iso = (d) => new Date(d).toISOString();
+const SEED_USER_PASSWORD = "admin-password";
+const FIONA_SEED_PASSWORD = "user-password";
 
 async function wipeAll() {
   // Remove all documents to guarantee a clean seed
@@ -35,7 +39,19 @@ async function ensureDemoStudent() {
     student = await UserModel.create({
       name: "Fiona",
       email: "fiona@student.local",
-      role: "student",
+      password: FIONA_SEED_PASSWORD,
+    });
+  }
+  return student;
+}
+
+async function ensureSecondDemoStudent() {
+  let student = await UserModel.findByEmail("sam@student.local");
+  if (!student) {
+    student = await UserModel.create({
+      name: "Sam",
+      email: "sam@student.local",
+      password: SEED_USER_PASSWORD,
     });
   }
   return student;
@@ -45,18 +61,22 @@ async function createWeekendWorkshop() {
   const instructor = await UserModel.create({
     name: "Ava",
     email: "ava@yoga.local",
-    role: "instructor",
+    role: "admin",
+    password: SEED_USER_PASSWORD,
   });
   const course = await CourseModel.create({
     title: "Winter Mindfulness Workshop",
     level: "beginner",
     type: "WEEKEND_WORKSHOP",
+    location: "Studio A",
     allowDropIn: false,
+    capacity: 1,
+    price: 60,
     startDate: "2026-01-10",
     endDate: "2026-01-11",
     instructorId: instructor._id,
-    sessionIds: [],
-    description: "Two days of breath, posture alignment, and meditation.",
+    description:
+      "Two days of breath, posture alignment, and meditation.",
   });
 
   const base = new Date("2026-01-10T09:00:00"); // Sat 9am
@@ -68,14 +88,10 @@ async function createWeekendWorkshop() {
       courseId: course._id,
       startDateTime: iso(start),
       endDateTime: iso(end),
-      capacity: 20,
       bookedCount: 0,
     });
     sessions.push(s);
   }
-  await CourseModel.update(course._id, {
-    sessionIds: sessions.map((s) => s._id),
-  });
   return { course, sessions, instructor };
 }
 
@@ -83,18 +99,22 @@ async function createWeeklyBlock() {
   const instructor = await UserModel.create({
     name: "Ben",
     email: "ben@yoga.local",
-    role: "instructor",
+    role: "admin",
+    password: SEED_USER_PASSWORD,
   });
   const course = await CourseModel.create({
     title: "12‑Week Vinyasa Flow",
     level: "intermediate",
     type: "WEEKLY_BLOCK",
+    location: "Main Hall",
     allowDropIn: true,
+    capacity: 1,
+    price: 8,
     startDate: "2026-02-02",
     endDate: "2026-04-20",
     instructorId: instructor._id,
-    sessionIds: [],
-    description: "Progressive sequences building strength and flexibility.",
+    description:
+      "Progressive sequences building strength and flexibility.",
   });
 
   const first = new Date("2026-02-02T18:30:00"); // Monday 6:30pm
@@ -106,15 +126,26 @@ async function createWeeklyBlock() {
       courseId: course._id,
       startDateTime: iso(start),
       endDateTime: iso(end),
-      capacity: 18,
       bookedCount: 0,
     });
     sessions.push(s);
   }
-  await CourseModel.update(course._id, {
-    sessionIds: sessions.map((s) => s._id),
-  });
   return { course, sessions, instructor };
+}
+
+async function createSeedBookings({ studentOne, studentTwo, weekend, weekly }) {
+  // Full-course bookings for the workshop (non drop-in): one confirmed, one waitlisted.
+  await bookCourseForUser(studentOne._id, weekend.course._id);
+  await bookCourseForUser(studentTwo._id, weekend.course._id);
+
+  // Drop-in bookings on weekly sessions: include both confirmed and waitlisted.
+  if (weekly.sessions[0]) {
+    await bookSessionForUser(studentOne._id, weekly.sessions[0]._id);
+    await bookSessionForUser(studentTwo._id, weekly.sessions[0]._id);
+  }
+  if (weekly.sessions[1]) {
+    await bookSessionForUser(studentOne._id, weekly.sessions[1]._id);
+  }
 }
 
 async function verifyAndReport() {
@@ -129,12 +160,12 @@ async function verifyAndReport() {
   console.log("Courses :", courses);
   console.log("Sessions:", sessions);
   console.log("Bookings:", bookings);
-  if (courses === 0 || sessions === 0) {
-    throw new Error("Seed finished but no courses/sessions were created.");
+  if (courses === 0 || sessions === 0 || bookings === 0) {
+    throw new Error("Seed finished but expected courses, sessions, and bookings to be created.");
   }
 }
 
-async function run() {
+export async function runSeed() {
   console.log("Initializing DB…");
   await initDb();
 
@@ -144,18 +175,29 @@ async function run() {
   console.log("Creating demo student…");
   const student = await ensureDemoStudent();
 
+  console.log("Creating second demo student…");
+  const secondStudent = await ensureSecondDemoStudent();
+
   console.log("Creating weekend workshop…");
   const w = await createWeekendWorkshop();
 
   console.log("Creating weekly block…");
   const b = await createWeeklyBlock();
 
+  console.log("Creating seed bookings…");
+  await createSeedBookings({
+    studentOne: student,
+    studentTwo: secondStudent,
+    weekend: w,
+    weekly: b,
+  });
+
   await verifyAndReport();
 
-  console.log("\n✅ Seed complete.");
-  console.log("Student ID           :", student._id);
+  console.log("run Seed complete.");
+  console.log("Student ID:", student._id);
   console.log(
-    "Workshop course ID   :",
+    "Workshop course ID:",
     w.course._id,
     "(sessions:",
     w.sessions.length + ")"
@@ -168,7 +210,12 @@ async function run() {
   );
 }
 
-run().catch((err) => {
-  console.error("❌ Seed failed:", err?.stack || err);
-  process.exit(1);
-});
+const isDirectRun =
+  !!process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+
+if (isDirectRun) {
+  runSeed().catch((err) => {
+    console.error("run Seed failed:", err?.stack || err);
+    process.exit(1);
+  });
+}

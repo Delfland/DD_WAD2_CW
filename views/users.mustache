@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+{{> head}}
+<body>
+{{> header}}
+<main class="wrap">
+  <h1>Registered Users</h1>
+
+  <section class="filters">
+    <form class="filter-form" method="get" action="/users">
+      <label class="field">
+        Search
+        <input type="search" name="q" value="{{filters.q}}" placeholder="Name or email" />
+      </label>
+
+      <label class="field">
+        <span>Role</span>
+        <span>
+          <input type="checkbox" name="admin" {{#filters.adminOnly}}checked{{/filters.adminOnly}} />
+          Admin only
+        </span>
+      </label>
+
+      <div>
+        <button class="btn primary" type="submit">Apply</button>
+        <a class="btn secondary" href="/users">Reset</a>
+      </div>
+    </form>
+  </section>
+
+  {{#hasUsers}}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        {{#canManageUsers}}<th>Actions</th>{{/canManageUsers}}
+      </tr>
+    </thead>
+    <tbody>
+      {{#users}}
+      <tr>
+        <td>{{name}}</td>
+        <td>{{email}}</td>
+        <td>{{role}}</td>
+        {{#canManageUsers}}
+        <td>
+          {{^isAdmin}}
+          <form class="inline-form" method="post" action="/users/{{id}}/admin">
+            <button class="btn secondary" type="submit">Make admin</button>
+          </form>
+          {{/isAdmin}}
+          {{#canRemoveAdmin}}
+          <form class="inline-form" method="post" action="/users/{{id}}/remove-admin">
+            <button class="btn secondary" type="submit">Remove admin</button>
+          </form>
+          {{/canRemoveAdmin}}
+          {{^isCurrentUser}}
+          <form class="inline-form" method="post" action="/users/{{id}}/delete">
+            <button class="btn link-style" type="submit">Delete user</button>
+          </form>
+          {{/isCurrentUser}}
+          {{#isCurrentUser}}
+          <span class="muted">Current user</span>
+          {{/isCurrentUser}}
+        </td>
+        {{/canManageUsers}}
+      </tr>
+      {{/users}}
+    </tbody>
+  </table>
+  {{/hasUsers}}
+
+  {{^hasUsers}}
+  <p>No registered users found.</p>
+  {{/hasUsers}}
+</main>
+{{> footer}}
+</body>
+</html>

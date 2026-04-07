@@ -9,6 +9,9 @@ export const BookingModel = {
   async findById(id) {
     return bookingsDb.findOne({ _id: id });
   },
+  async listByCourse(courseId) {
+    return bookingsDb.find({ courseId }).sort({ createdAt: -1 });
+  },
   async listByUser(userId) {
     return bookingsDb.find({ userId }).sort({ createdAt: -1 });
   },

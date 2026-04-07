@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+{{> head}}
+<body>
+{{> header}}
+<main class="wrap">
+<article>
+  <h1>Book Session: {{course.title}}</h1>
+  <p class="muted">Price: &pound; {{course.price}} {{#course.allowDropIn}}per session{{/course.allowDropIn}}{{^course.allowDropIn}}per course{{/course.allowDropIn}}</p>
+  <p class="muted">Location: {{course.location}}</p>
+  <p class="muted">Start: {{session.start}}</p>
+  <p class="muted">End: {{session.end}}</p>
+  <p class="muted">Remaining places: {{session.remaining}}</p>
+
+  {{#errors}}
+  <div class="alert error" role="alert" aria-live="assertive">
+    <ul>
+      {{#list}}
+      <li>{{.}}</li>
+      {{/list}}
+    </ul>
+  </div>
+  {{/errors}}
+
+  <form method="post" action="/sessions/{{session.id}}/book">
+    <input type="hidden" name="userId" value="{{user._id}}">
+
+    <fieldset>
+      <legend>Your details</legend>
+
+      <div class="field">
+        <label for="name">Full name</label>
+        <input id="name" name="name" type="text" required value="{{user.name}}">
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required value="{{user.email}}">
+      </div>
+    </fieldset>
+
+    <div class="actions">
+      <button class="btn primary" type="submit">Confirm Session Booking</button>
+      <a class="btn secondary" href="/courses/{{course.id}}">Cancel</a>
+    </div>
+  </form>
+</article>
+</main>
+{{> footer}}
+</body>
+</html>

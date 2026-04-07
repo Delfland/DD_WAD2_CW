@@ -1,8 +1,21 @@
 <header class="site-header">
   <div class="wrap">
-    🧘 Yoga Studio
+    <img src="/static/images/logo.png" alt="kindred yoga studio logo" width="100" height="120">
+    <a class="brand" href="/">Kindred Yoga Studio</a>
     <nav>
-      <a> hrefs</a>
+      {{#isAdmin}}
+      <a href="/users">Users</a>
+      <a href="/courses">Courses</a>
+      {{/isAdmin}}
+      {{^user}}
+      <a href="/register">Register</a>
+      <a href="/login">Login</a>
+      {{/user}}
+      {{#user}}
+      <form class="inline-form" method="post" action="/logout">
+        <button class="btn secondary" type="submit">Logout</button>
+      </form>
+      {{/user}}
     </nav>
     {{#user}}
     <div class="user">

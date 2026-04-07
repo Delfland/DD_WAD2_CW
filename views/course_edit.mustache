@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+{{> head}}
+<body>
+{{> header}}
+<main class="wrap">
+<article>
+  <h1>Edit: {{course.title}}</h1>
+
+  <form method="post" action="/courses/{{course.id}}/edit">
+    <fieldset>
+      <legend>Course Details</legend>
+
+      <div class="field">
+        <label for="title">Title</label>
+        <input id="title" name="title" type="text" required value="{{course.title}}" />
+      </div>
+
+      <div class="field">
+        <label for="level">Level</label>
+        <select id="level" name="level" required>
+          <option value="beginner" {{#course.isBeginner}}selected{{/course.isBeginner}}>Beginner</option>
+          <option value="intermediate" {{#course.isIntermediate}}selected{{/course.isIntermediate}}>Intermediate</option>
+          <option value="advanced" {{#course.isAdvanced}}selected{{/course.isAdvanced}}>Advanced</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="type">Type</label>
+        <select id="type" name="type" required>
+          <option value="WEEKLY_BLOCK" {{#course.isWeeklyBlock}}selected{{/course.isWeeklyBlock}}>Weekly Block</option>
+          <option value="WEEKEND_WORKSHOP" {{#course.isWeekendWorkshop}}selected{{/course.isWeekendWorkshop}}>Weekend Workshop</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="location">Location</label>
+        <input id="location" name="location" type="text" value="{{course.location}}" />
+      </div>
+
+      <div class="field">
+        <label for="price">Price (£)</label>
+        <input id="price" name="price" type="number" step="0.01" required value="{{course.price}}" />
+      </div>
+
+      <div class="field">
+        <label for="capacity">Capacity (max students per session)</label>
+        <input id="capacity" name="capacity" type="number" min="0" required value="{{course.capacity}}" />
+      </div>
+
+      <div class="field">
+        <label for="allowDropIn">
+          <input id="allowDropIn" name="allowDropIn" type="checkbox" {{#course.allowDropIn}}checked{{/course.allowDropIn}} />
+          Allow Drop-in Sessions
+        </label>
+      </div>
+
+      <div class="field">
+        <label for="startDate">Start Date (DD/MM/YYYY)</label>
+        <input id="startDate" name="startDate" type="date" required value="{{course.startDate}}" />
+      </div>
+
+      <div class="field">
+        <label for="endDate">End Date (DD/MM/YYYY)</label>
+        <input id="endDate" name="endDate" type="date" required value="{{course.endDate}}" />
+      </div>
+
+      <div class="field">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="4">{{course.description}}</textarea>
+      </div>
+    </fieldset>
+
+    <div class="actions">
+      <button class="btn primary" type="submit">Save Course Changes</button>
+      <a class="btn secondary" href="/courses">Cancel</a>
+    </div>
+  </form>
+
+  <hr />
+
+  <section>
+    <h2>Manage Sessions</h2>
+
+    {{#sessions}}
+    <div class="card">
+      <p><strong>Session {{@index}}</strong></p>
+      <p class="muted">Date: {{date}}</p>
+      <p class="muted">Start time: {{startTime}}</p>
+      <p class="muted">End time: {{endTime}}</p>
+      <p class="muted">Capacity: {{capacity}} • Booked: {{bookedCount}}</p>
+      <div>
+        <a class="btn secondary" href="/courses/{{course.id}}/sessions/{{id}}/edit">Update</a>
+        <form class="inline-form" method="post" action="/courses/{{course.id}}/sessions/{{id}}/delete">
+          <button class="btn link-style" type="submit" onclick="return confirm('Delete this session? Bookings for this session will be affected.');">Delete</button>
+        </form>
+      </div>
+    </div>
+    {{/sessions}}
+
+    {{^sessions}}
+    <p class="muted">No sessions created yet.</p>
+    {{/sessions}}
+
+    <hr />
+
+    <form method="post" action="/courses/{{course.id}}/sessions/new">
+      <fieldset>
+        <legend>Create New Session</legend>
+
+        <div class="field">
+          <label for="sessionDate">Date</label>
+          <input id="sessionDate" name="sessionDate" type="date" required />
+        </div>
+
+        <div class="field">
+          <label for="startTime">Start Time</label>
+          <input id="startTime" name="startTime" type="time" required />
+        </div>
+
+        <div class="field">
+          <label for="endTime">End Time</label>
+          <input id="endTime" name="endTime" type="time" required />
+        </div>
+
+        <button class="btn primary" type="submit">Add Session</button>
+      </fieldset>
+    </form>
+  </section>
+</article>
+</main>
+{{> footer}}
+</body>
+</html>
