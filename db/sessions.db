@@ -1,3 +1,3 @@
 {"$$indexCreated":{"fieldName":"courseId","unique":false,"sparse":false}}
-{"courseId":"XZSu62vKdvdE12WL","startDateTime":"2026-02-02T18:30:00.000Z","endDateTime":"2026-02-02T19:45:00.000Z","bookedCount":0,"capacity":18,"createdAt":"2026-04-08T07:49:16.907Z","updatedAt":"2026-04-08T07:49:16.907Z","_id":"YMVN9T4kCBTL2Yfr"}
-{"courseId":"XZSu62vKdvdE12WL","startDateTime":"2026-02-09T18:30:00.000Z","endDateTime":"2026-02-09T19:45:00.000Z","bookedCount":0,"capacity":18,"createdAt":"2026-04-08T07:49:16.908Z","updatedAt":"2026-04-08T07:49:16.908Z","_id":"GNw2qK6UidXueChP"}
+{"courseId":"rnquII6krEZtcS7U","startDateTime":"2026-02-02T18:30:00.000Z","endDateTime":"2026-02-02T19:45:00.000Z","bookedCount":0,"capacity":18,"createdAt":"2026-04-08T08:26:46.088Z","updatedAt":"2026-04-08T08:26:46.088Z","_id":"pTC2j75W6YugnPeE"}
+{"courseId":"rnquII6krEZtcS7U","startDateTime":"2026-02-09T18:30:00.000Z","endDateTime":"2026-02-09T19:45:00.000Z","bookedCount":0,"capacity":18,"createdAt":"2026-04-08T08:26:46.090Z","updatedAt":"2026-04-08T08:26:46.090Z","_id":"UO9xwr5YGoLekPsV"}

@@ -2,6 +2,7 @@ import request from "supertest";
 import { app } from "../index.js";
 import { resetDb, seedMinimal } from "./helpers.js";
 import { createAuthToken } from "../auth/auth.js";
+import { CourseModel } from "../models/courseModel.js";
 
 describe("SSR view routes", () => {
   let data;
@@ -70,5 +71,38 @@ describe("SSR view routes", () => {
     expect(instructorIdx).toBeGreaterThan(-1);
     expect(studentIdx).toBeGreaterThan(-1);
     expect(instructorIdx).toBeLessThan(studentIdx);
+  });
+
+  test("GET and POST /courses/:id/edit preserve course capacity", async () => {
+    const adminCookie = authCookie(data.instructor);
+
+    const editPage = await request(app)
+      .get(`/courses/${data.course._id}/edit`)
+      .set("Cookie", adminCookie);
+
+    expect(editPage.status).toBe(200);
+    expect(editPage.text).toMatch(/name="capacity"[^>]*value="18"/);
+
+    const updateResponse = await request(app)
+      .post(`/courses/${data.course._id}/edit`)
+      .set("Cookie", adminCookie)
+      .type("form")
+      .send({
+        title: data.course.title,
+        level: data.course.level,
+        type: data.course.type,
+        location: data.course.location || "",
+        allowDropIn: "on",
+        capacity: "25",
+        price: String(data.course.price),
+        startDate: data.course.startDate,
+        endDate: data.course.endDate,
+        description: data.course.description || "",
+      });
+
+    expect(updateResponse.status).toBe(302);
+
+    const updatedCourse = await CourseModel.findById(data.course._id);
+    expect(updatedCourse.capacity).toBe(25);
   });
 });

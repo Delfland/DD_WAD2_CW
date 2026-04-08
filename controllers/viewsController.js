@@ -532,6 +532,7 @@ export const courseEditPage = async (req, res, next) => {
         isWeekendWorkshop: course.type === "WEEKEND_WORKSHOP",
         location: course.location,
         allowDropIn: course.allowDropIn,
+        capacity: course.capacity,
         price: course.price,
         startDate: course.startDate,
         endDate: course.endDate,

@@ -1,3 +1,3 @@
 {"$$indexCreated":{"fieldName":"email","unique":true,"sparse":false}}
-{"name":"Test Student","email":"student@test.local","role":"user","createdAt":"2026-04-08T07:49:16.892Z","_id":"Bvg3ScpleOPL0mBW"}
-{"name":"Test Instructor","email":"instructor@test.local","role":"admin","createdAt":"2026-04-08T07:49:16.904Z","_id":"QQqMcBMgQ0wWokK9"}
+{"name":"Test Student","email":"student@test.local","role":"user","createdAt":"2026-04-08T08:26:46.074Z","_id":"QuAy3QIeHDVTIhwJ"}
+{"name":"Test Instructor","email":"instructor@test.local","role":"admin","createdAt":"2026-04-08T08:26:46.087Z","_id":"hYtwcaCGxnV2a5kB"}
