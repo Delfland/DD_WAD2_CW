@@ -1,5 +1,3 @@
-{"name":"Ben","email":"ben@yoga.local","role":"admin","createdAt":"2026-04-07T22:54:02.336Z","passwordHash":"$2b$10$/mEHJPyzMk934eF/6XngQezqA4tsF3rSzXQzX6H56d2UG63tF3Jq6","_id":"NmCbyVOG1KKazuJa"}
-{"name":"Ava","email":"ava@yoga.local","role":"admin","createdAt":"2026-04-07T22:54:02.272Z","passwordHash":"$2b$10$VPNoESyIEVRygkWtri4toew1nGZbxb9S6eh34SkoKlXlSJwMCxpuy","_id":"WLNyeXJzMQC3vr03"}
-{"name":"Fiona","email":"fiona@student.local","role":"user","createdAt":"2026-04-07T22:54:02.146Z","passwordHash":"$2b$10$x0lBywAcpxQwpeBIoYHvqOsVkPpNg8OrjdD5OVS1ubANE6xrrQ1IW","_id":"ksDDQL7Ejvg5qANj"}
-{"name":"Sam","email":"sam@student.local","role":"user","createdAt":"2026-04-07T22:54:02.209Z","passwordHash":"$2b$10$Py43.iRP/KEAfZrG93Lx7.OYwU/QgCESbxmbEtpTumgTegeNybkKK","_id":"sIkuOe6h3jMwW5dL"}
 {"$$indexCreated":{"fieldName":"email","unique":true,"sparse":false}}
+{"name":"Test Student","email":"student@test.local","role":"user","createdAt":"2026-04-08T07:49:16.892Z","_id":"Bvg3ScpleOPL0mBW"}
+{"name":"Test Instructor","email":"instructor@test.local","role":"admin","createdAt":"2026-04-08T07:49:16.904Z","_id":"QQqMcBMgQ0wWokK9"}

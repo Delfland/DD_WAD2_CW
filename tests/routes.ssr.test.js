@@ -1,9 +1,12 @@
 import request from "supertest";
 import { app } from "../index.js";
 import { resetDb, seedMinimal } from "./helpers.js";
+import { createAuthToken } from "../auth/auth.js";
 
 describe("SSR view routes", () => {
   let data;
+
+  const authCookie = (user) => `authToken=${createAuthToken(user)}`;
 
   beforeAll(async () => {
     process.env.NODE_ENV = "test";
@@ -20,7 +23,9 @@ describe("SSR view routes", () => {
   });
 
   test("GET /courses (list page) renders HTML and shows Test Course", async () => {
-    const res = await request(app).get("/courses");
+    const res = await request(app)
+      .get("/courses")
+      .set("Cookie", authCookie(data.instructor));
     expect(res.status).toBe(200);
     expect(res.headers["content-type"]).toMatch(/html/);
     expect(res.text).toMatch(/Test Course/);
@@ -34,7 +39,9 @@ describe("SSR view routes", () => {
   });
 
   test("GET /courses/:id/book renders course booking form", async () => {
-    const res = await request(app).get(`/courses/${data.course._id}/book`);
+    const res = await request(app)
+      .get(`/courses/${data.course._id}/book`)
+      .set("Cookie", authCookie(data.student));
     expect(res.status).toBe(200);
     expect(res.headers["content-type"]).toMatch(/html/);
     expect(res.text).toMatch(/Confirm Course Booking|Book:/i);
@@ -49,7 +56,9 @@ describe("SSR view routes", () => {
   });
 
   test("GET /users renders users alphabetically by name with emails", async () => {
-    const res = await request(app).get("/users");
+    const res = await request(app)
+      .get("/users")
+      .set("Cookie", authCookie(data.instructor));
     expect(res.status).toBe(200);
     expect(res.headers["content-type"]).toMatch(/html/);
     expect(res.text).toMatch(/Registered Users/);

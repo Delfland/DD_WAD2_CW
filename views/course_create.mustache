@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+{{> head}}
+<body>
+{{> header}}
+<main class="wrap">
+<article>
+  <h1>Create Course</h1>
+  <p class="muted">Create a new course and its first session in one step.</p>
+
+  <form method="post" action="/courses/new">
+    <fieldset>
+      <legend>Course Details</legend>
+
+      <div class="field">
+        <label for="title">Title</label>
+        <input id="title" name="title" type="text" required />
+      </div>
+
+      <div class="field">
+        <label for="level">Level</label>
+        <select id="level" name="level" required>
+          <option value="beginner" {{#course.isBeginner}}selected{{/course.isBeginner}}>Beginner</option>
+          <option value="intermediate" {{#course.isIntermediate}}selected{{/course.isIntermediate}}>Intermediate</option>
+          <option value="advanced" {{#course.isAdvanced}}selected{{/course.isAdvanced}}>Advanced</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="type">Type</label>
+        <select id="type" name="type" required>
+          <option value="WEEKLY_BLOCK" {{#course.isWeeklyBlock}}selected{{/course.isWeeklyBlock}}>Weekly block</option>
+          <option value="WEEKEND_WORKSHOP" {{#course.isWeekendWorkshop}}selected{{/course.isWeekendWorkshop}}>Weekend workshop</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="location">Location</label>
+        <input id="location" name="location" type="text" />
+      </div>
+
+      <div class="field">
+        <label for="price">Price (£)</label>
+        <input id="price" name="price" type="number" step="0.01" required />
+      </div>
+
+      <div class="field">
+        <label for="capacity">Capacity (max students per session)</label>
+        <input id="capacity" name="capacity" type="number" min="0" required />
+      </div>
+
+      <div class="field">
+        <label for="allowDropIn">
+          <input id="allowDropIn" name="allowDropIn" type="checkbox" {{#course.allowDropIn}}checked{{/course.allowDropIn}} />
+          Allow Drop-in Sessions
+        </label>
+      </div>
+
+      <div class="field">
+        <label for="startDate">Start Date (DD/MM/YYYY)</label>
+        <input id="startDate" name="startDate" type="date" required />
+      </div>
+
+      <div class="field">
+        <label for="endDate">End Date (DD/MM/YYYY)</label>
+        <input id="endDate" name="endDate" type="date" required />
+      </div>
+
+      <div class="field">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="4"></textarea>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>First Session</legend>
+
+      <div class="field">
+        <label for="sessionDate">Date</label>
+        <input id="sessionDate" name="sessionDate" type="date" required />
+      </div>
+
+      <div class="field">
+        <label for="startTime">Start Time</label>
+        <input id="startTime" name="startTime" type="time" required />
+      </div>
+
+      <div class="field">
+        <label for="endTime">End Time</label>
+        <input id="endTime" name="endTime" type="time" required />
+      </div>
+    </fieldset>
+
+    <div class="actions">
+      <button class="btn primary" type="submit">Create Course</button>
+      <a class="btn secondary" href="/courses">Cancel</a>
+    </div>
+  </form>
+</article>
+</main>
+{{> footer}}
+</body>
+</html>

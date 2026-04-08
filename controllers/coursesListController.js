@@ -23,6 +23,12 @@ const fmtDateTime = (iso) =>
       })
     : "TBA";
 
+const formatCourseType = (type) => {
+  if (type === "WEEKLY_BLOCK") return "Weekly block";
+  if (type === "WEEKEND_WORKSHOP") return "Weekend workshop";
+  return type;
+};
+
 export const coursesListPage = async (req, res, next) => {
   try {
     // Query params for filters/pagination
@@ -84,7 +90,7 @@ export const coursesListPage = async (req, res, next) => {
           id: c._id,
           title: c.title,
           level: c.level,
-          type: c.type,
+          type: formatCourseType(c.type),
           location: c.location,
           allowDropIn: c.allowDropIn,
           price: c.price,

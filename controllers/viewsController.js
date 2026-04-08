@@ -24,6 +24,12 @@ const fmtDateOnly = (iso) =>
     day: "numeric",
   });
 
+const formatCourseType = (type) => {
+  if (type === "WEEKLY_BLOCK") return "Weekly block";
+  if (type === "WEEKEND_WORKSHOP") return "Weekend workshop";
+  return type;
+};
+
 const toSessionDateParts = (iso) => {
   const dt = new Date(iso);
   if (isNaN(dt.getTime())) {
@@ -63,7 +69,7 @@ export const homePage = async (req, res, next) => {
           id: c._id,
           title: c.title,
           level: c.level,
-          type: c.type,
+          type: formatCourseType(c.type),
           location: c.location,
           allowDropIn: c.allowDropIn,
           price: c.price,
@@ -115,7 +121,7 @@ export const courseDetailPage = async (req, res, next) => {
         id: course._id,
         title: course.title,
         level: course.level,
-        type: course.type,
+        type: formatCourseType(course.type),
         location: course.location,
         allowDropIn: course.allowDropIn,
         isFull: courseIsFull,
@@ -156,7 +162,7 @@ export const courseBookingPage = async (req, res, next) => {
         id: course._id,
         title: course.title,
         level: course.level,
-        type: course.type,
+        type: formatCourseType(course.type),
         location: course.location,
         allowDropIn: course.allowDropIn,
         price: course.price,
@@ -547,6 +553,89 @@ export const courseEditPage = async (req, res, next) => {
     });
   } catch (err) {
     next(err);
+  }
+};
+
+export const courseCreatePage = async (req, res, next) => {
+  try {
+    return res.render("course_create", {
+      title: "Create Course",
+      course: {
+        level: "beginner",
+        isBeginner: true,
+        isIntermediate: false,
+        isAdvanced: false,
+        type: "WEEKLY_BLOCK",
+        isWeeklyBlock: true,
+        isWeekendWorkshop: false,
+        allowDropIn: true,
+      },
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const postCourseCreate = async (req, res, next) => {
+  try {
+    const {
+      title,
+      level,
+      type,
+      location,
+      allowDropIn,
+      capacity,
+      price,
+      startDate,
+      endDate,
+      description,
+      sessionDate,
+      startTime,
+      endTime,
+    } = req.body;
+
+    const initialSessionTimes = buildSessionDateTimes(
+      sessionDate,
+      startTime,
+      endTime
+    );
+    if (!initialSessionTimes) {
+      return res.status(400).render("error", {
+        title: "Invalid dates",
+        message: "Please provide a valid date, start time, and end time.",
+      });
+    }
+    if (initialSessionTimes === "END_BEFORE_START") {
+      return res.status(400).render("error", {
+        title: "Invalid times",
+        message: "End time must be after start time.",
+      });
+    }
+
+    const course = await CourseModel.create({
+      title,
+      level,
+      type,
+      location,
+      allowDropIn: allowDropIn === "on" || allowDropIn === "true",
+      capacity: parseInt(capacity, 10),
+      price: parseFloat(price),
+      startDate,
+      endDate,
+      instructorId: req.user?._id,
+      description,
+    });
+
+    await SessionModel.create({
+      courseId: course._id,
+      startDateTime: initialSessionTimes.startDateTime,
+      endDateTime: initialSessionTimes.endDateTime,
+      bookedCount: 0,
+    });
+
+    return res.redirect(`/courses/${course._id}/edit`);
+  } catch (err) {
+    return next(err);
   }
 };
 

@@ -20,6 +20,8 @@ import {
   makeUserAdmin,
   removeUserAdmin,
   deleteUser,
+  courseCreatePage,
+  postCourseCreate,
 } from "../controllers/viewsController.js";
 import { requireAdmin, requireAuth } from "../auth/auth.js";
 
@@ -33,6 +35,8 @@ router.post("/users/:id/admin", requireAdmin, makeUserAdmin);
 router.post("/users/:id/remove-admin", requireAdmin, removeUserAdmin);
 router.post("/users/:id/delete", requireAdmin, deleteUser);
 router.get("/courses", requireAdmin, coursesListPage);
+router.get("/courses/new", requireAdmin, courseCreatePage);
+router.post("/courses/new", requireAdmin, postCourseCreate);
 router.get("/courses/:id", courseDetailPage);
 router.get("/courses/:id/bookings", requireAdmin, courseBookingsPage);
 router.get("/courses/:id/edit", requireAdmin, courseEditPage);
